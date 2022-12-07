@@ -1,0 +1,30 @@
+version: "4,1"
+
+services:
+  db_bluebox:
+    image: postgres
+    container_name: db_bluebox
+    restart: always
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=bluebox
+    volumes:
+      - pgdata:/data/postgres
+  app:
+    build: .
+    container_name: app_bluebox
+    ports:
+      - 3333:3333
+    volumes:
+      - .:/usr/app
+    links:
+      - db_bluebox
+    depends_on:
+      - db_bluebox
+
+volumes:
+  pgdata:
+    driver: local
